@@ -2,29 +2,22 @@ import React from 'react';
 import { useTimer } from '../contexts/TimerContext';
 
 const Controls = () => {
-  const { isRunning, setIsRunning, handleReset, theme } = useTimer();
-
-  const themeColors = {
-    light: { start: '#4CAF50', pause: '#FF5722', reset: '#2196F3' },
-    dark: { start: '#9C27B0', pause: '#FF7043', reset: '#BB86FC' },
-    pink: { start: '#FF69B4', pause: '#FF4500', reset: '#FF1493' },
-    ocean: { start: '#20B2AA', pause: '#00BFFF', reset: '#1E90FF' }
-  };
+  const { isRunning, setIsRunning, handleReset, theme, themes } = useTimer();
 
   return (
     <div className="controls-container">
       <button 
-        className="control-btn reset-btn"
+        className="control-btn reset"
         onClick={handleReset}
-        style={{ backgroundColor: themeColors[theme].reset }}
+        style={{ backgroundColor: themes[theme].button }}
       >
         RESET
       </button>
       <button 
-        className={`control-btn ${isRunning ? 'pause-btn' : 'start-btn'}`}
+        className={`control-btn ${isRunning ? 'pause' : 'start'}`}
         onClick={() => setIsRunning(!isRunning)}
         style={{ 
-          backgroundColor: isRunning ? themeColors[theme].pause : themeColors[theme].start 
+          backgroundColor: isRunning ? themes[theme].pause : themes[theme].focus 
         }}
       >
         {isRunning ? 'PAUSE' : 'START'}

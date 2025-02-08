@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const Circle = styled.svg`
   width: 300px;
   height: 300px;
-  transform: rotate(-90deg);
+  transform: rotate(90deg); // Changed rotation
   margin: 0 auto;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
 `;
@@ -19,22 +19,29 @@ const TimeDisplay = styled.div`
   font-weight: bold;
   font-family: 'Courier New', monospace;
   color: ${({ theme }) => theme.text};
+  text-align: center;
+  width: 100%;
+`;
+
+const PhaseIndicator = styled.div`
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+  color: ${({ theme, phase }) => (phase === 'focus' ? theme.focus : theme.pause)};
 `;
 
 const ProgressCircle = () => {
-  const { timeLeft, currentIntervalIndex, intervals, phase, theme } = useTimer();
+  const { timeLeft, currentIntervalIndex, intervals, phase, theme, themes } = useTimer();
   const radius = 140;
   const circumference = 2 * Math.PI * radius;
   const currentDuration = intervals[currentIntervalIndex]?.duration || 1500;
-  const progress = timeLeft / currentDuration;
+  const progress = 1 - (timeLeft / currentDuration);
   const offset = circumference * (1 - progress);
-
-  const themeColors = {
-    light: { focus: '#4CAF50', pause: '#FF5722', background: '#E0E0E0', text: '#2d3436' },
-    dark: { focus: '#9C27B0', pause: '#FF7043', background: '#444', text: '#fff' },
-    pink: { focus: '#FF69B4', pause: '#FF4500', background: '#FFB6C1', text: '#ff69b4' },
-    ocean: { focus: '#20B2AA', pause: '#00BFFF', background: '#AFEEEE', text: '#00b4d8' }
-  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -49,7 +56,7 @@ const ProgressCircle = () => {
           cx="150"
           cy="150"
           r={radius}
-          stroke={themeColors[theme].background}
+          stroke={themes[theme].circleBg}
           strokeWidth="10"
           fill="transparent"
         />
@@ -57,7 +64,7 @@ const ProgressCircle = () => {
           cx="150"
           cy="150"
           r={radius}
-          stroke={themeColors[theme][phase]}
+          stroke={themes[theme][phase]}
           strokeWidth="10"
           fill="transparent"
           strokeDasharray={`${circumference}`}
@@ -65,9 +72,12 @@ const ProgressCircle = () => {
           strokeLinecap="round"
         />
       </Circle>
-      <TimeDisplay theme={themeColors[theme]}>
+      <TimeDisplay theme={themes[theme]}>
         {formatTime(timeLeft)}
       </TimeDisplay>
+      <PhaseIndicator theme={themes[theme]} phase={phase}>
+        {phase.toUpperCase()} TIME
+      </PhaseIndicator>
     </div>
   );
 };

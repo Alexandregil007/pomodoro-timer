@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useTimer } from '../contexts/TimerContext';
 import { v4 as uuidv4 } from 'uuid';
-import { FiTrash2 } from 'react-icons/fi';
+import { FiTrash2, FiX } from 'react-icons/fi';
 
 const Settings = ({ onClose }) => {
   const {
     theme,
     setTheme,
+    themes,
     soundsEnabled,
     setSoundsEnabled,
     vibrationEnabled,
@@ -29,33 +30,40 @@ const Settings = ({ onClose }) => {
     }
   };
 
-  const themeColors = {
-    light: { background: '#f8f9fa', text: '#2d3436' },
-    dark: { background: '#444', text: '#ffffff' },
-    pink: { background: '#fff0f5', text: '#ff69b4' },
-    ocean: { background: '#f0f8ff', text: '#00b4d8' }
-  };
-
   return (
     <div className="settings-overlay">
-      <div className="settings-panel">
+      <div className="settings-panel" style={{ backgroundColor: themes[theme].background, color: themes[theme].text }}>
         <div className="settings-header">
           <h2>Advanced Settings</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <button 
+            className="close-btn" 
+            onClick={onClose} 
+            style={{ 
+              color: '#000', 
+              backgroundColor: '#FFF', 
+              borderRadius: '50%', 
+              padding: '0.5rem',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            <FiX size={24} color="#000" />
+          </button>
         </div>
 
+        {/* Appearance */}
         <div className="settings-group">
           <h3>Appearance</h3>
           <div className="theme-options">
-            {['light', 'dark', 'pink', 'ocean'].map((t) => (
+            {Object.keys(themes).map((t) => (
               <button
                 key={t}
                 className={`theme-btn ${theme === t ? 'active' : ''}`}
                 onClick={() => setTheme(t)}
                 style={{
-                  backgroundColor: themeColors[t].background,
-                  color: themeColors[t].text,
-                  borderColor: theme === t ? '#4CAF50' : 'transparent'
+                  backgroundColor: themes[t].background,
+                  color: themes[t].text,
+                  borderColor: theme === t ? themes[t].button : 'transparent'
                 }}
               >
                 {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -64,6 +72,42 @@ const Settings = ({ onClose }) => {
           </div>
         </div>
 
+        {/* Timer Options */}
+        <div className="settings-group">
+          <h3>Timer Options</h3>
+          <div className="option-list">
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={infiniteLoop}
+                onChange={(e) => setInfiniteLoop(e.target.checked)}
+              />
+              <span className="slider"></span>
+              Infinite Loop
+            </label>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={soundsEnabled}
+                onChange={(e) => setSoundsEnabled(e.target.checked)}
+              />
+              <span className="slider"></span>
+              Enable Sounds
+            </label>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={vibrationEnabled}
+                onChange={(e) => setVibrationEnabled(e.target.checked)}
+              />
+              <span className="slider"></span>
+              Enable Vibration
+              <span className="vibration-note">(smartphones only)</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Timer Intervals */}
         <div className="settings-group">
           <h3>Timer Intervals</h3>
           <div className="interval-container">
@@ -77,6 +121,7 @@ const Settings = ({ onClose }) => {
                       newIntervals[index].type = interval.type === 'focus' ? 'pause' : 'focus';
                       setIntervals(newIntervals);
                     }}
+                    style={{ backgroundColor: themes[theme].button }}
                   >
                     {interval.type.charAt(0).toUpperCase() + interval.type.slice(1)}
                   </button>
@@ -89,13 +134,18 @@ const Settings = ({ onClose }) => {
                       setIntervals(newIntervals);
                     }}
                     min="1"
+                    style={{ 
+                      color: themes[theme].text === '#FFF' ? '#000' : themes[theme].text,
+                      borderColor: themes[theme].text 
+                    }}
                   />
                 </div>
                 <button 
                   className="delete-btn"
                   onClick={() => setIntervals(intervals.filter((_, i) => i !== index))}
+                  style={{ background: 'none', border: 'none', padding: 0 }}
                 >
-                  <FiTrash2 className="trash-icon" />
+                  <FiTrash2 size={20} color="#ff4444" />
                 </button>
               </div>
             ))}
@@ -107,6 +157,7 @@ const Settings = ({ onClose }) => {
                 ...prev,
                 type: prev.type === 'focus' ? 'pause' : 'focus'
               }))}
+              style={{ backgroundColor: themes[theme].button }}
             >
               {newInterval.type.charAt(0).toUpperCase() + newInterval.type.slice(1)}
             </button>
@@ -115,45 +166,18 @@ const Settings = ({ onClose }) => {
               value={newInterval.duration}
               onChange={(e) => setNewInterval({ ...newInterval, duration: e.target.value })}
               min="1"
+              style={{ 
+                color: themes[theme].text === '#FFF' ? '#000' : themes[theme].text,
+                borderColor: themes[theme].text 
+              }}
             />
-            <button className="add-btn" onClick={handleAddInterval}>
+            <button className="add-btn" onClick={handleAddInterval} style={{ backgroundColor: themes[theme].button }}>
               Add Interval
             </button>
           </div>
         </div>
 
-        <div className="settings-group">
-          <h3>Timer Options</h3>
-          <div className="option-list">
-            <label>
-              <input
-                type="checkbox"
-                checked={infiniteLoop}
-                onChange={(e) => setInfiniteLoop(e.target.checked)}
-              />
-              Infinite Loop
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={soundsEnabled}
-                onChange={(e) => setSoundsEnabled(e.target.checked)}
-              />
-              Enable Sounds
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={vibrationEnabled}
-                onChange={(e) => setVibrationEnabled(e.target.checked)}
-              />
-              Enable Vibration
-              <span className="vibration-note">(smartphones only)</span>
-            </label>
-          </div>
-        </div>
-
-        <button className="save-button" onClick={onClose}>
+        <button className="save-button" onClick={onClose} style={{ backgroundColor: themes[theme].button }}>
           Save Settings
         </button>
       </div>

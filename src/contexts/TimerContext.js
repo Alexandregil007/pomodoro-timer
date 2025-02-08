@@ -1,11 +1,4 @@
-import React, { 
-  createContext, 
-  useContext, 
-  useState, 
-  useEffect, 
-  useRef, 
-  useMemo // Added useMemo import
-} from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import useSound from 'use-sound';
 import alertSound from '../assets/sounds/alert.mp3';
@@ -32,9 +25,43 @@ export const TimerProvider = ({ children }) => {
   const [sessionCount, setSessionCount] = useState(0);
   const [play] = useSound(alertSound);
   const progressRef = useRef(1);
-
-  // Memoize vibration pattern
   const VIBRATION_PATTERN = useMemo(() => [500, 250, 500], []);
+
+  const themes = {
+    light: { 
+      background: '#FFF', 
+      text: '#000', 
+      button: '#2196F3', 
+      focus: '#4CAF50', // Key color for start button
+      pause: '#FF5722',
+      circleBg: '#E0E0E0'
+    },
+    dark: { 
+      background: '#121212', 
+      text: '#FFF', 
+      button: '#BB86FC', 
+      focus: '#9C27B0',
+      pause: '#FF7043',
+      circleBg: '#2D2D2D'
+    },
+    pink: { 
+      background: '#FFF0F5', 
+      text: '#FF69B4', 
+      button: '#FF1493', 
+      focus: '#FF69B4',
+      pause: '#FF4500',
+      circleBg: '#FFB6C1'
+    },
+    ocean: { 
+      background: '#F0FFFF', 
+      text: '#4682B4', 
+      button: '#1E90FF', 
+      focus: '#20B2AA',
+      pause: '#00BFFF',
+      circleBg: '#AFEEEE'
+    }
+  };
+
 
   const safeSetIntervals = (newIntervals) => {
     if (newIntervals.length === 0) {
@@ -102,6 +129,7 @@ export const TimerProvider = ({ children }) => {
       timeLeft, setTimeLeft,
       phase, setPhase,
       theme, setTheme,
+      themes,
       soundsEnabled, setSoundsEnabled,
       vibrationEnabled, setVibrationEnabled,
       intervals, setIntervals: safeSetIntervals,

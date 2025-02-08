@@ -10,17 +10,10 @@ body {
 }
 
 /* Theme Colors */
-body.light { background: #f8f9fa; color: #2d3436; }
-body.dark { background: #444; color: #ffffff; }
-body.pink { background: #fff0f5; color: #ff69b4; }
-body.ocean { background: #f0f8ff; color: #00b4d8; }
-
-.app-container {
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-  position: relative;
-}
+body.light { background: #FFF; color: #000; }
+body.dark { background: #121212; color: #FFF; }
+body.pink { background: #FFF0F5; color: #FF69B4; }
+body.ocean { background: #F0FFFF; color: #4682B4; }
 
 /* Timer Container */
 .timer-container {
@@ -28,7 +21,10 @@ body.ocean { background: #f0f8ff; color: #00b4d8; }
   padding: 2rem;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  background: rgba(255,255,255,0.9);
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  position: relative;
 }
 
 body.dark .timer-container {
@@ -43,18 +39,7 @@ body.ocean .timer-container {
   background: rgba(240,248,255,0.9);
 }
 
-.settings-button {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  color: inherit;
-}
-
+/* Session Counter */
 .session-counter {
   position: absolute;
   top: 1rem;
@@ -65,10 +50,11 @@ body.ocean .timer-container {
   gap: 0.5rem;
 }
 
+/* App Title */
 .app-title {
   font-size: 2rem;
-  margin-bottom: 2rem;
   font-weight: bold;
+  margin-bottom: 2rem;
 }
 
 /* Progress Circle Container */
@@ -78,27 +64,6 @@ body.ocean .timer-container {
   width: 300px;
   height: 300px;
 }
-
-.time-display {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3.5rem;
-  font-weight: bold;
-  font-family: 'Courier New', monospace;
-}
-
-.phase-indicator {
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin: 1rem 0;
-  font-weight: bold;
-}
-
-.phase-indicator.focus { color: #4CAF50; }
-.phase-indicator.pause { color: #FF5722; }
 
 /* Controls */
 .controls-container {
@@ -118,9 +83,17 @@ body.ocean .timer-container {
   color: white;
 }
 
-.control-btn.reset { background: #2196F3; }
-.control-btn.start { background: #4CAF50; }
-.control-btn.pause { background: #FF5722; }
+/* Settings Button */
+.settings-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
 
 /* Settings Overlay */
 .settings-overlay {
@@ -138,19 +111,16 @@ body.ocean .timer-container {
 
 .settings-panel {
   background: rgba(255,255,255,0.95);
-  color: inherit;
   padding: 2rem;
   border-radius: 15px;
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 
 body.dark .settings-panel {
   background: rgba(45,45,45,0.95);
-  color: #fff;
 }
 
 .settings-header {
@@ -158,14 +128,6 @@ body.dark .settings-panel {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: inherit;
 }
 
 .theme-options {
@@ -181,16 +143,6 @@ body.dark .settings-panel {
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: inherit;
-}
-
-.theme-btn.active {
-  border-color: #4CAF50;
-  box-shadow: 0 0 10px rgba(76,175,80,0.3);
-}
-
-.interval-container {
-  margin: 1rem 0;
 }
 
 .interval-row {
@@ -212,29 +164,17 @@ body.dark .settings-panel {
   min-width: 80px;
 }
 
-.type-btn.focus { background: #4CAF50; }
-.type-btn.pause { background: #FF5722; }
-
 .delete-btn {
-  background: #e74c3c;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.2rem;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: none;
+  color: #ff4444;
+  font-size: 1.5rem;
+  padding: 0;
 }
 
 .interval-add {
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 2px solid rgba(0,0,0,0.1);
 }
 
 .add-btn {
@@ -261,12 +201,6 @@ input[type="number"] {
   margin: 1rem 0;
 }
 
-.option-list label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .save-button {
   width: 100%;
   padding: 1rem;
@@ -278,147 +212,60 @@ input[type="number"] {
   margin-top: 2rem;
 }
 
-.settings-overlay {
-  backdrop-filter: blur(5px);
-}
-
-.delete-btn {
-  background: none !important;
-  color: #ff4444 !important;
-  font-size: 1.5rem;
-  padding: 0 !important;
-  width: auto !important;
-  height: auto !important;
-}
-
-.delete-btn:hover {
-  color: #cc0000 !important;
-}
-
-.interval-row {
-  background: rgba(0,0,0,0.03) !important;
-}
-
-body.dark .interval-row {
-  background: rgba(255,255,255,0.05) !important;
-}
-
-.settings-group {
-  margin-bottom: 2rem;
-}
-
-.settings-group h3 {
-  color: inherit;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.interval-controls {
-  display: flex;
-  gap: 1rem;
-  flex: 1;
-}
-
-.trash-icon {
-  color: #ff4444;
-  width: 20px;
-  height: 20px;
-  transition: color 0.2s;
-}
-
-.trash-icon:hover {
-  color: #cc0000;
-}
-
-.delete-btn {
-  background: none !important;
-  padding: 0 !important;
-  border: none !important;
-  display: flex;
-  align-items: center;
-}
-
-.theme-btn[data-theme="dark"] {
-  background: #444 !important;
-}
-
-.interval-row {
+.switch {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.interval-add {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.settings-panel {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.settings-panel::-webkit-scrollbar {
-  display: none;
-}
-
-/* New Interactive Styles */
-button {
-  transition: all 0.2s ease;
   cursor: pointer;
+  width: 100%;
+  padding: 0.5rem 0;
 }
 
-button:hover {
-  transform: scale(1.05);
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-button:active {
-  transform: scale(0.95);
+.slider {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
 }
 
-input[type="number"] {
-  transition: all 0.2s ease;
-  background: rgba(255,255,255,0.1);
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 21px;
+  width: 21px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
 }
 
-input[type="number"]:focus {
-  outline: 2px solid currentColor;
+input:checked + .slider {
+  background-color: #2196F3;
 }
 
-body.light {
-  --hover-brightness: 1.1;
-  --active-brightness: 0.9;
+input:checked + .slider:before {
+  transform: translateX(25px);
 }
 
-body.dark {
-  --hover-brightness: 1.2;
-  --active-brightness: 0.8;
-}
-
-body.pink {
-  --hover-brightness: 1.15;
-  --active-brightness: 0.85;
-}
-
-body.ocean {
-  --hover-brightness: 1.15;
-  --active-brightness: 0.85;
-}
-
-.control-btn:hover {
-  filter: brightness(var(--hover-brightness));
-}
-
-.control-btn:active {
-  filter: brightness(var(--active-brightness));
-}
+/* Theme-specific slider colors */
+body.light input:checked + .slider { background-color: #4CAF50; }
+body.dark input:checked + .slider { background-color: #BB86FC; }
+body.pink input:checked + .slider { background-color: #FF1493; }
+body.ocean input:checked + .slider { background-color: #1E90FF; }
 
 .vibration-note {
-  color: currentColor;
-  opacity: 0.6;
-  font-size: 0.8em;
+  font-size: 0.8rem;
+  color: #666;
   margin-left: 0.5rem;
 }
