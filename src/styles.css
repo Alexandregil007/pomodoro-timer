@@ -11,7 +11,7 @@ body {
 
 /* Theme Colors */
 body.light { background: #f8f9fa; color: #2d3436; }
-body.dark { background: #2d2d2d; color: #ffffff; }
+body.dark { background: #444; color: #ffffff; }
 body.pink { background: #fff0f5; color: #ff69b4; }
 body.ocean { background: #f0f8ff; color: #00b4d8; }
 
@@ -137,7 +137,7 @@ body.ocean .timer-container {
 }
 
 .settings-panel {
-  background: inherit;
+  background: rgba(255,255,255,0.95);
   color: inherit;
   padding: 2rem;
   border-radius: 15px;
@@ -146,6 +146,11 @@ body.ocean .timer-container {
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+body.dark .settings-panel {
+  background: rgba(45,45,45,0.95);
+  color: #fff;
 }
 
 .settings-header {
@@ -176,6 +181,7 @@ body.ocean .timer-container {
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
+  color: inherit;
 }
 
 .theme-btn.active {
@@ -290,16 +296,6 @@ input[type="number"] {
 }
 
 /* Update existing styles */
-.settings-panel {
-  background: rgba(255,255,255,0.95) !important;
-  box-shadow: 0 0 30px rgba(0,0,0,0.2) !important;
-}
-
-body.dark .settings-panel {
-  background: rgba(45,45,45,0.95) !important;
-  color: #fff !important;
-}
-
 .interval-row {
   background: rgba(0,0,0,0.03) !important;
 }
@@ -360,4 +356,14 @@ body.dark .interval-row {
   display: flex;
   gap: 1rem;
   margin-top: 1.5rem;
+}
+
+/* Hide scrollbar for settings panel */
+.settings-panel {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.settings-panel::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
 }

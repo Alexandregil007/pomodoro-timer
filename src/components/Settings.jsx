@@ -29,6 +29,13 @@ const Settings = ({ onClose }) => {
     }
   };
 
+  const themeColors = {
+    light: { background: '#f8f9fa', text: '#2d3436' },
+    dark: { background: '#444', text: '#ffffff' },
+    pink: { background: '#fff0f5', text: '#ff69b4' },
+    ocean: { background: '#f0f8ff', text: '#00b4d8' }
+  };
+
   return (
     <div className="settings-overlay">
       <div className="settings-panel">
@@ -46,9 +53,8 @@ const Settings = ({ onClose }) => {
                 className={`theme-btn ${theme === t ? 'active' : ''}`}
                 onClick={() => setTheme(t)}
                 style={{
-                  background: t === 'light' ? '#f8f9fa' :
-                            t === 'dark' ? '#444' : // Darker than before
-                            t === 'pink' ? '#fff0f5' : '#f0f8ff',
+                  backgroundColor: themeColors[t].background,
+                  color: themeColors[t].text,
                   borderColor: theme === t ? '#4CAF50' : 'transparent'
                 }}
               >
