@@ -148,6 +148,7 @@ const Settings = ({ onClose }) => {
                 onChange={(e) => setVibrationEnabled(e.target.checked)}
               />
               Enable Vibration
+              <span className="vibration-note">(smartphones only)</span>
             </label>
           </div>
         </div>

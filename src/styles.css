@@ -295,7 +295,6 @@ input[type="number"] {
   color: #cc0000 !important;
 }
 
-/* Update existing styles */
 .interval-row {
   background: rgba(0,0,0,0.03) !important;
 }
@@ -340,7 +339,6 @@ body.dark .interval-row {
   align-items: center;
 }
 
-/* Update existing styles */
 .theme-btn[data-theme="dark"] {
   background: #444 !important;
 }
@@ -358,12 +356,69 @@ body.dark .interval-row {
   margin-top: 1.5rem;
 }
 
-/* Hide scrollbar for settings panel */
 .settings-panel {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .settings-panel::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
+  display: none;
+}
+
+/* New Interactive Styles */
+button {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+input[type="number"] {
+  transition: all 0.2s ease;
+  background: rgba(255,255,255,0.1);
+}
+
+input[type="number"]:focus {
+  outline: 2px solid currentColor;
+}
+
+body.light {
+  --hover-brightness: 1.1;
+  --active-brightness: 0.9;
+}
+
+body.dark {
+  --hover-brightness: 1.2;
+  --active-brightness: 0.8;
+}
+
+body.pink {
+  --hover-brightness: 1.15;
+  --active-brightness: 0.85;
+}
+
+body.ocean {
+  --hover-brightness: 1.15;
+  --active-brightness: 0.85;
+}
+
+.control-btn:hover {
+  filter: brightness(var(--hover-brightness));
+}
+
+.control-btn:active {
+  filter: brightness(var(--active-brightness));
+}
+
+.vibration-note {
+  color: currentColor;
+  opacity: 0.6;
+  font-size: 0.8em;
+  margin-left: 0.5rem;
 }

@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { 
+  createContext, 
+  useContext, 
+  useState, 
+  useEffect, 
+  useRef, 
+  useMemo // Added useMemo import
+} from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import useSound from 'use-sound';
 import alertSound from '../assets/sounds/alert.mp3';
@@ -25,6 +32,9 @@ export const TimerProvider = ({ children }) => {
   const [sessionCount, setSessionCount] = useState(0);
   const [play] = useSound(alertSound);
   const progressRef = useRef(1);
+
+  // Memoize vibration pattern
+  const VIBRATION_PATTERN = useMemo(() => [500, 250, 500], []);
 
   const safeSetIntervals = (newIntervals) => {
     if (newIntervals.length === 0) {
@@ -62,7 +72,10 @@ export const TimerProvider = ({ children }) => {
     } else if (timeLeft === 0) {
       if (soundsEnabled) play();
       
-      // Update session count when focus ends
+      if (vibrationEnabled && navigator.vibrate) {
+        navigator.vibrate(VIBRATION_PATTERN);
+      }
+
       if (phase === 'focus') {
         setSessionCount(prev => prev + 1);
       }
@@ -81,7 +94,7 @@ export const TimerProvider = ({ children }) => {
       }
     }
     return () => clearInterval(interval);
-  }, [isRunning, timeLeft, currentIntervalIndex, intervals, infiniteLoop, phase, soundsEnabled, play]);
+  }, [isRunning, timeLeft, currentIntervalIndex, intervals, infiniteLoop, phase, soundsEnabled, play, vibrationEnabled, VIBRATION_PATTERN]);
 
   return (
     <TimerContext.Provider value={{
