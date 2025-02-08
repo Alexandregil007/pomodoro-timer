@@ -20,7 +20,7 @@ const Timer = ({ showSettings }) => {
         <span>Sessions: {sessionCount}</span>
       </div>
 
-      <h1 className="app-title">❤️ Carolina Timer</h1>
+      <h1 className="app-title">❤️ Carolina Timer ❤️ </h1>
 
       <ProgressCircle />
 
