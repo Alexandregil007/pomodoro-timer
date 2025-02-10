@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const Circle = styled.svg`
   width: 300px;
   height: 300px;
-  transform: rotate(90deg); // Changed rotation
+  transform: rotate(90deg);
   margin: 0 auto;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
 `;
@@ -19,8 +19,6 @@ const TimeDisplay = styled.div`
   font-weight: bold;
   font-family: 'Courier New', monospace;
   color: ${({ theme }) => theme.text};
-  text-align: center;
-  width: 100%;
 `;
 
 const PhaseIndicator = styled.div`
@@ -31,15 +29,15 @@ const PhaseIndicator = styled.div`
   font-size: 1.2rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-weight: bold;
-  color: ${({ theme, phase }) => (phase === 'focus' ? theme.focus : theme.pause)};
+  color: ${({ $phase, theme }) => 
+    $phase === 'focus' ? theme.focus : theme.pause};
 `;
 
 const ProgressCircle = () => {
-  const { timeLeft, currentIntervalIndex, intervals, phase, theme, themes } = useTimer();
+  const { timeLeft, durations, phase, theme, themes } = useTimer();
   const radius = 140;
   const circumference = 2 * Math.PI * radius;
-  const currentDuration = intervals[currentIntervalIndex]?.duration || 1500;
+  const currentDuration = durations[phase] * 60;
   const progress = 1 - (timeLeft / currentDuration);
   const offset = circumference * (1 - progress);
 
@@ -64,7 +62,7 @@ const ProgressCircle = () => {
           cx="150"
           cy="150"
           r={radius}
-          stroke={themes[theme][phase]}
+          stroke={themes[theme][phase === 'longBreak' ? 'pause' : phase]}
           strokeWidth="10"
           fill="transparent"
           strokeDasharray={`${circumference}`}
@@ -75,8 +73,10 @@ const ProgressCircle = () => {
       <TimeDisplay theme={themes[theme]}>
         {formatTime(timeLeft)}
       </TimeDisplay>
-      <PhaseIndicator theme={themes[theme]} phase={phase}>
-        {phase.toUpperCase()} TIME
+      <PhaseIndicator $phase={phase} theme={themes[theme]}>
+        {phase === 'focus' && 'FOCUS TIME'}
+        {phase === 'break' && 'BREAK TIME'}
+        {phase === 'longBreak' && 'LONG BREAK TIME'}
       </PhaseIndicator>
     </div>
   );

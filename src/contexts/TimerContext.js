@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef, useMemo } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import useSound from 'use-sound';
 import alertSound from '../assets/sounds/alert.mp3';
 
@@ -7,24 +6,27 @@ const TimerContext = createContext();
 
 export const TimerProvider = ({ children }) => {
   const [isRunning, setIsRunning] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(1500);
-  const [currentIntervalIndex, setCurrentIntervalIndex] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [phase, setPhase] = useState('focus');
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('pink');
   const [soundsEnabled, setSoundsEnabled] = useState(true);
+  const [volume, setVolume] = useState(1);
   const [vibrationEnabled, setVibrationEnabled] = useState(false);
-  const [intervals, setIntervals] = useState([
-    { id: uuidv4(), type: 'focus', duration: 1500 },
-    { id: uuidv4(), type: 'pause', duration: 300 },
-    { id: uuidv4(), type: 'focus', duration: 1500 },
-    { id: uuidv4(), type: 'pause', duration: 300 },
-    { id: uuidv4(), type: 'focus', duration: 1500 },
-    { id: uuidv4(), type: 'pause', duration: 900 }
-  ]);
-  const [infiniteLoop, setInfiniteLoop] = useState(false);
+  const [infiniteLoop, setInfiniteLoop] = useState(true);
+  const [autoSkip, setAutoSkip] = useState(false);
   const [sessionCount, setSessionCount] = useState(0);
-  const [play] = useSound(alertSound);
-  const progressRef = useRef(1);
+  const [repetitions, setRepetitions] = useState(4);
+  const [useDefaultValues, setUseDefaultValues] = useState(true);
+  const [userDurations, setUserDurations] = useState({ focus: 25, break: 5, longBreak: 15 });
+  const [userRepetitions, setUserRepetitions] = useState(4);
+
+  const [durations, setDurations] = useState({
+    focus: 25,
+    break: 5,
+    longBreak: 15
+  });
+
+  const [play] = useSound(alertSound, { volume });
   const VIBRATION_PATTERN = useMemo(() => [500, 250, 500], []);
 
   const themes = {
@@ -32,7 +34,7 @@ export const TimerProvider = ({ children }) => {
       background: '#FFF', 
       text: '#000', 
       button: '#2196F3', 
-      focus: '#4CAF50', // Key color for start button
+      focus: '#4CAF50', 
       pause: '#FF5722',
       circleBg: '#E0E0E0'
     },
@@ -40,7 +42,7 @@ export const TimerProvider = ({ children }) => {
       background: '#121212', 
       text: '#FFF', 
       button: '#BB86FC', 
-      focus: '#9C27B0',
+      focus: '#9C27B0', 
       pause: '#FF7043',
       circleBg: '#2D2D2D'
     },
@@ -48,7 +50,7 @@ export const TimerProvider = ({ children }) => {
       background: '#FFF0F5', 
       text: '#FF69B4', 
       button: '#FF1493', 
-      focus: '#FF69B4',
+      focus: '#FF69B4', 
       pause: '#FF4500',
       circleBg: '#FFB6C1'
     },
@@ -56,20 +58,9 @@ export const TimerProvider = ({ children }) => {
       background: '#F0FFFF', 
       text: '#4682B4', 
       button: '#1E90FF', 
-      focus: '#20B2AA',
+      focus: '#20B2AA', 
       pause: '#00BFFF',
       circleBg: '#AFEEEE'
-    }
-  };
-
-
-  const safeSetIntervals = (newIntervals) => {
-    if (newIntervals.length === 0) {
-      newIntervals = [{ id: uuidv4(), type: 'focus', duration: 1500 }];
-    }
-    setIntervals(newIntervals);
-    if (currentIntervalIndex >= newIntervals.length) {
-      setCurrentIntervalIndex(0);
     }
   };
 
@@ -79,49 +70,57 @@ export const TimerProvider = ({ children }) => {
 
   const handleReset = () => {
     setIsRunning(false);
-    setCurrentIntervalIndex(0);
-    setTimeLeft(intervals[0].duration);
-    setPhase(intervals[0].type);
+    setPhase('focus');
+    setTimeLeft(durations.focus * 60);
     setSessionCount(0);
-    progressRef.current = 1;
   };
+
+  useEffect(() => {
+    if (useDefaultValues) {
+      setDurations({ focus: 25, break: 5, longBreak: 15 });
+      setRepetitions(4);
+    } else {
+      setDurations(userDurations);
+      setRepetitions(userRepetitions);
+    }
+  }, [useDefaultValues, userDurations, userRepetitions]);
 
   useEffect(() => {
     let interval;
     if (isRunning && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft(prev => {
-          const newTime = prev - 1;
-          progressRef.current = newTime / intervals[currentIntervalIndex].duration;
-          return newTime;
-        });
-      }, 1000);
+      interval = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
     } else if (timeLeft === 0) {
       if (soundsEnabled) play();
-      
-      if (vibrationEnabled && navigator.vibrate) {
-        navigator.vibrate(VIBRATION_PATTERN);
-      }
+      if (vibrationEnabled && navigator.vibrate) navigator.vibrate(VIBRATION_PATTERN);
+
+      let nextPhase = phase;
+      let newCount = sessionCount;
 
       if (phase === 'focus') {
-        setSessionCount(prev => prev + 1);
+        newCount = sessionCount + 1;
+        setSessionCount(newCount);
+        nextPhase = (newCount % repetitions === 0) ? 'longBreak' : 'break';
+      } else if (phase === 'break' || phase === 'longBreak') {
+        nextPhase = infiniteLoop ? 'focus' : 'stop';
       }
 
-      if (intervals[currentIntervalIndex + 1]) {
-        const nextIndex = currentIntervalIndex + 1;
-        setCurrentIntervalIndex(nextIndex);
-        setPhase(intervals[nextIndex].type);
-        setTimeLeft(intervals[nextIndex].duration);
-      } else if (infiniteLoop) {
-        setCurrentIntervalIndex(0);
-        setPhase(intervals[0].type);
-        setTimeLeft(intervals[0].duration);
+      if (nextPhase !== 'stop') {
+        setPhase(nextPhase);
+        setTimeLeft(durations[nextPhase] * 60);
+        if (autoSkip) {
+          setIsRunning(true);
+        } else {
+          setIsRunning(false);
+        }
       } else {
         setIsRunning(false);
       }
     }
     return () => clearInterval(interval);
-  }, [isRunning, timeLeft, currentIntervalIndex, intervals, infiniteLoop, phase, soundsEnabled, play, vibrationEnabled, VIBRATION_PATTERN]);
+  }, [
+    isRunning, timeLeft, phase, durations, infiniteLoop, sessionCount,
+    soundsEnabled, play, vibrationEnabled, VIBRATION_PATTERN, repetitions, autoSkip
+  ]);
 
   return (
     <TimerContext.Provider value={{
@@ -132,12 +131,16 @@ export const TimerProvider = ({ children }) => {
       themes,
       soundsEnabled, setSoundsEnabled,
       vibrationEnabled, setVibrationEnabled,
-      intervals, setIntervals: safeSetIntervals,
+      volume, setVolume,
       infiniteLoop, setInfiniteLoop,
+      autoSkip, setAutoSkip,
+      durations, setDurations,
+      repetitions, setRepetitions,
       sessionCount,
-      currentIntervalIndex, setCurrentIntervalIndex,
-      progress: progressRef,
-      handleReset
+      handleReset,
+      useDefaultValues, setUseDefaultValues,
+      userDurations, setUserDurations,
+      userRepetitions, setUserRepetitions
     }}>
       {children}
     </TimerContext.Provider>

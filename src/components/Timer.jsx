@@ -5,27 +5,32 @@ import Controls from './Controls';
 import { FiSettings } from 'react-icons/fi';
 
 const Timer = ({ showSettings }) => {
-  const { sessionCount, theme, themes } = useTimer();
+  const { theme, themes, sessionCount } = useTimer(); // Removed unused 'phase'
 
   return (
     <div className="timer-container" style={{ backgroundColor: themes[theme].background }}>
+      {/* Settings Button */}
       <button 
         className="settings-button"
         onClick={showSettings}
-        style={{ color: themes[theme].text }}
       >
-        <FiSettings />
+        <FiSettings size={24} />
       </button>
 
+      {/* Session Counter */}
       <div className="session-counter" style={{ color: themes[theme].text }}>
-        <span>Sessions: {sessionCount}</span>
+        Sessions Completed: {sessionCount}
       </div>
 
+      {/* App Title */}
       <h1 className="app-title" style={{ color: themes[theme].text }}>
-      ❤️ Carolina Timer ❤️
+        ❤️ Carolina Timer ❤️
       </h1>
 
+      {/* Progress Circle with Phase Indicator */}
       <ProgressCircle />
+
+      {/* Controls */}
       <Controls />
     </div>
   );

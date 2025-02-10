@@ -2,25 +2,23 @@ import React from 'react';
 import { useTimer } from '../contexts/TimerContext';
 
 const ThemeSwitcher = () => {
-  const { theme, setTheme } = useTimer();
-  const themes = [
-    { name: 'light', color: '#fff' },
-    { name: 'dark', color: '#2d2d2d' },
-    { name: 'pink', color: '#ff99cc' },
-    { name: 'ocean', color: '#99ccff' }
-  ];
+  const { theme, setTheme, themes } = useTimer();
 
   return (
     <div className="theme-switcher">
-      {themes.map((t) => (
+      {Object.keys(themes).map((t) => (
         <button
-          key={t.name}
-          onClick={() => setTheme(t.name)}
-          style={{ 
-            backgroundColor: t.color,
-            border: theme === t.name ? '2px solid #e74c3c' : '2px solid #fff'
+          key={t}
+          className={`theme-btn ${theme === t ? 'active' : ''}`}
+          onClick={() => setTheme(t)}
+          style={{
+            backgroundColor: themes[t].background,
+            color: themes[t].text,
+            borderColor: theme === t ? themes[t].button : 'transparent'
           }}
-        />
+        >
+          {t.charAt(0).toUpperCase() + t.slice(1)}
+        </button>
       ))}
     </div>
   );
