@@ -1,4 +1,3 @@
-/* Global Styles */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell;
   margin: 0;
@@ -9,13 +8,11 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
-/* Theme Colors */
 body.light { background: #FFF; color: #000; }
 body.dark { background: #121212; color: #FFF; }
 body.pink { background: #FFF0F5; color: #FF69B4; }
 body.ocean { background: #F0FFFF; color: #4682B4; }
 
-/* Timer Container */
 .timer-container {
   text-align: center;
   padding: 2rem;
@@ -39,7 +36,6 @@ body.ocean .timer-container {
   background: rgba(240,248,255,0.9);
 }
 
-/* Session Counter */
 .session-counter {
   position: absolute;
   top: 1rem;
@@ -49,7 +45,6 @@ body.ocean .timer-container {
   color: inherit;
 }
 
-/* Settings Button */
 .settings-button {
   position: absolute;
   top: 1rem;
@@ -66,14 +61,12 @@ body.dark .settings-button {
   color: #FFF;
 }
 
-/* App Title */
 .app-title {
   font-size: 2rem;
   margin: 50px 0 30px 0;
   color: inherit;
 }
 
-/* Progress Circle Container */
 .progress-container {
   position: relative;
   margin: 2rem auto;
@@ -81,7 +74,6 @@ body.dark .settings-button {
   height: 300px;
 }
 
-/* Controls */
 .controls-container {
   display: flex;
   gap: 1rem;
@@ -111,7 +103,6 @@ body.dark .settings-button {
   background-color: #FF5722;
 }
 
-/* Settings Overlay */
 .settings-overlay {
   position: fixed;
   top: 0;
@@ -140,7 +131,6 @@ body.dark .settings-panel {
   background: rgba(45,45,45,0.95);
 }
 
-/* Close Button */
 .close-btn {
   position: absolute;
   top: 1rem;
@@ -170,13 +160,11 @@ body.dark .close-btn:hover {
   background: rgba(255,255,255,0.2);
 }
 
-/* Settings Header */
 .settings-header {
   margin-bottom: 1.5rem;
-  padding-right: 40px; /* Space for close button */
+  padding-right: 40px;
 }
 
-/* Theme Switcher */
 .theme-switcher {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -192,7 +180,6 @@ body.dark .close-btn:hover {
   transition: all 0.2s ease;
 }
 
-/* Timer Durations (Horizontal) */
 .horizontal-durations {
   width: 100%;
   margin-top: 1rem;
@@ -223,7 +210,6 @@ body.dark .close-btn:hover {
   text-align: center;
 }
 
-/* Timer Options */
 .option-list {
   display: flex;
   flex-direction: column;
@@ -272,7 +258,6 @@ input:checked + .slider:before {
   transform: translateX(25px);
 }
 
-/* Save Button */
 .save-button {
   width: 100%;
   padding: 1rem;
@@ -289,7 +274,6 @@ input:checked + .slider:before {
   opacity: 0.9;
 }
 
-/* Responsive Design */
 @media (max-width: 480px) {
   .timer-container {
     padding: 1rem;
@@ -309,7 +293,6 @@ input:checked + .slider:before {
   }
 }
 
-/* Default Values Info */
 .default-values-info {
   margin-top: 1rem;
   padding: 0.5rem;
@@ -323,7 +306,6 @@ input:checked + .slider:before {
   color: inherit;
 }
 
-/* Error Message */
 .error-message {
   color: red;
   font-size: 0.8rem;
@@ -332,7 +314,6 @@ input:checked + .slider:before {
   text-align: center;
 }
 
-/* Phase Switcher */
 .phase-switcher {
   display: flex;
   gap: 1rem;
@@ -352,31 +333,12 @@ input:checked + .slider:before {
   color: white !important;
 }
 
-/* Full Screen Animation */
-.fullscreen-animation {
+canvas.confetti-canvas {
   position: fixed;
   top: 0;
   left: 0;
+  pointer-events: none;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-  animation: fadeIn 0.5s;
-}
-
-.animation-content {
-  font-size: 3rem;
-  color: white;
-  text-align: center;
-  padding: 2rem;
-  background: rgba(255,255,255,0.1);
-  border-radius: 15px;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  z-index: 9999;
 }

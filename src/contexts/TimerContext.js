@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import useSound from 'use-sound';
 import alertSound from '../assets/sounds/alert.mp3';
+import { runConfetti } from '../utils/confetti';
 
 const TimerContext = createContext();
 
@@ -29,7 +30,7 @@ export const TimerProvider = ({ children }) => {
   const [play] = useSound(alertSound, { volume });
   const VIBRATION_PATTERN = useMemo(() => [500, 250, 500], []);
 
-  const themes = {
+  const themes = useMemo(() => ({
     light: { 
       background: '#FFF', 
       text: '#000', 
@@ -62,7 +63,7 @@ export const TimerProvider = ({ children }) => {
       pause: '#00BFFF',
       circleBg: '#AFEEEE'
     }
-  };
+  }), []); // Memoized with empty dependency array
 
   useEffect(() => {
     document.body.className = theme;
@@ -99,6 +100,15 @@ export const TimerProvider = ({ children }) => {
       if (soundsEnabled) play();
       if (vibrationEnabled && navigator.vibrate) navigator.vibrate(VIBRATION_PATTERN);
 
+      if (phase === 'focus') {
+        const themeColors = [
+          themes[theme].focus,
+          themes[theme].button,
+          themes[theme].pause
+        ];
+        runConfetti(themeColors);
+      }
+
       let nextPhase = phase;
       let newCount = sessionCount;
 
@@ -125,7 +135,8 @@ export const TimerProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [
     isRunning, timeLeft, phase, durations, infiniteLoop, sessionCount,
-    soundsEnabled, play, vibrationEnabled, VIBRATION_PATTERN, repetitions, autoSkip
+    soundsEnabled, play, vibrationEnabled, VIBRATION_PATTERN, repetitions, 
+    autoSkip, theme, themes
   ]);
 
   return (
@@ -147,7 +158,7 @@ export const TimerProvider = ({ children }) => {
       useDefaultValues, setUseDefaultValues,
       userDurations, setUserDurations,
       userRepetitions, setUserRepetitions,
-      switchPhase // Add this line
+      switchPhase
     }}>
       {children}
     </TimerContext.Provider>
