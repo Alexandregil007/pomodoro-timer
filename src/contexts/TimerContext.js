@@ -75,6 +75,12 @@ export const TimerProvider = ({ children }) => {
     setSessionCount(0);
   };
 
+  const switchPhase = (newPhase) => {
+    setPhase(newPhase);
+    setTimeLeft(durations[newPhase] * 60);
+    setIsRunning(false);
+  };
+
   useEffect(() => {
     if (useDefaultValues) {
       setDurations({ focus: 25, break: 5, longBreak: 15 });
@@ -140,7 +146,8 @@ export const TimerProvider = ({ children }) => {
       handleReset,
       useDefaultValues, setUseDefaultValues,
       userDurations, setUserDurations,
-      userRepetitions, setUserRepetitions
+      userRepetitions, setUserRepetitions,
+      switchPhase // Add this line
     }}>
       {children}
     </TimerContext.Provider>

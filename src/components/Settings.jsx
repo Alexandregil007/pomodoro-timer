@@ -116,7 +116,7 @@ const Settings = ({ onClose }) => {
                 className="slider"
                 style={{ backgroundColor: localInfiniteLoop ? themes[theme].button : '#ccc' }}
               ></span>
-              Infinite Loop
+              <span className="switch-label">Infinite Loop</span>
             </label>
 
             <label className="switch">
@@ -130,7 +130,7 @@ const Settings = ({ onClose }) => {
                 className="slider"
                 style={{ backgroundColor: localAutoSkip ? themes[theme].button : '#ccc' }}
               ></span>
-              Auto-Skip Timers
+              <span className="switch-label">Auto-Skip Timers</span>
             </label>
             
             <label className="switch">
@@ -144,7 +144,7 @@ const Settings = ({ onClose }) => {
                 className="slider"
                 style={{ backgroundColor: localSoundsEnabled ? themes[theme].button : '#ccc' }}
               ></span>
-              Enable Sounds
+              <span className="switch-label">Enable Sounds</span>
             </label>
             
             {localSoundsEnabled && (
@@ -176,7 +176,7 @@ const Settings = ({ onClose }) => {
                 className="slider"
                 style={{ backgroundColor: localVibrationEnabled ? themes[theme].button : '#ccc' }}
               ></span>
-              Enable Vibration <span className="vibration-note">(smartphones only)</span>
+              <span className="switch-label">Enable Vibration <span className="vibration-note">(smartphones only)</span></span>
             </label>
           </div>
         </div>
@@ -195,7 +195,7 @@ const Settings = ({ onClose }) => {
                 className="slider"
                 style={{ backgroundColor: localUseDefaultValues ? themes[theme].button : '#ccc' }}
               ></span>
-              Default
+              <span className="switch-label">Default</span>
             </label>
           </div>
           
@@ -209,32 +209,47 @@ const Settings = ({ onClose }) => {
           )}
           
           {!localUseDefaultValues && (
-            <>
-              <div className="duration-controls">
-                {Object.entries(localDurations).map(([phase, duration]) => (
-                  <div key={phase} className="duration-row">
-                    <label>{phase.charAt(0).toUpperCase() + phase.slice(1).replace(/([A-Z])/g, ' $1')}</label>
-                    <input
-                      type="number"
-                      value={duration}
-                      onChange={(e) => setLocalDurations(prev => ({...prev, [phase]: Number(e.target.value)}))}
-                      min="1"
-                    />
-                  </div>
-                ))}
-              </div>
-
+            <div className="horizontal-durations">
               <div className="duration-row">
-                <label>Long Break Cycle</label>
-                <input
-                  type="number"
-                  value={localRepetitions}
-                  onChange={(e) => handleRepetitionsChange(Number(e.target.value))}
-                  min="1"
-                />
-                {cycleError && <span className="error-message">{cycleError}</span>}
+                <div className="duration-item">
+                  <label>Focus</label>
+                  <input
+                    type="number"
+                    value={localDurations.focus}
+                    onChange={(e) => setLocalDurations(prev => ({ ...prev, focus: Number(e.target.value) }))}
+                    min="1"
+                  />
+                </div>
+                <div className="duration-item">
+                  <label>Break</label>
+                  <input
+                    type="number"
+                    value={localDurations.break}
+                    onChange={(e) => setLocalDurations(prev => ({ ...prev, break: Number(e.target.value) }))}
+                    min="1"
+                  />
+                </div>
+                <div className="duration-item">
+                  <label>Long Break</label>
+                  <input
+                    type="number"
+                    value={localDurations.longBreak}
+                    onChange={(e) => setLocalDurations(prev => ({ ...prev, longBreak: Number(e.target.value) }))}
+                    min="1"
+                  />
+                </div>
+                <div className="duration-item">
+                  <label>Cycle</label>
+                  <input
+                    type="number"
+                    value={localRepetitions}
+                    onChange={(e) => handleRepetitionsChange(Number(e.target.value))}
+                    min="1"
+                  />
+                </div>
               </div>
-            </>
+              {cycleError && <span className="error-message">{cycleError}</span>}
+            </div>
           )}
         </div>
 
