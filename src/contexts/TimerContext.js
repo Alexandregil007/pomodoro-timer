@@ -63,7 +63,7 @@ export const TimerProvider = ({ children }) => {
       pause: '#00BFFF',
       circleBg: '#AFEEEE'
     }
-  }), []); // Memoized with empty dependency array
+  }), []);
 
   useEffect(() => {
     document.body.className = theme;
@@ -99,7 +99,7 @@ export const TimerProvider = ({ children }) => {
     } else if (timeLeft === 0) {
       if (soundsEnabled) play();
       if (vibrationEnabled && navigator.vibrate) navigator.vibrate(VIBRATION_PATTERN);
-
+  
       if (phase === 'focus') {
         const themeColors = [
           themes[theme].focus,
@@ -108,10 +108,10 @@ export const TimerProvider = ({ children }) => {
         ];
         runConfetti(themeColors);
       }
-
+  
       let nextPhase = phase;
       let newCount = sessionCount;
-
+  
       if (phase === 'focus') {
         newCount = sessionCount + 1;
         setSessionCount(newCount);
@@ -119,7 +119,7 @@ export const TimerProvider = ({ children }) => {
       } else if (phase === 'break' || phase === 'longBreak') {
         nextPhase = infiniteLoop ? 'focus' : 'stop';
       }
-
+  
       if (nextPhase !== 'stop') {
         setPhase(nextPhase);
         setTimeLeft(durations[nextPhase] * 60);
@@ -165,4 +165,10 @@ export const TimerProvider = ({ children }) => {
   );
 };
 
-export const useTimer = () => useContext(TimerContext);
+export const useTimer = () => {
+  const context = useContext(TimerContext);
+  if (!context) {
+    throw new Error('useTimer must be used within a TimerProvider');
+  }
+  return context;
+};

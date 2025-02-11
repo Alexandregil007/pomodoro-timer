@@ -11,7 +11,7 @@ const Timer = ({ showSettings }) => {
     phase, 
     switchPhase, 
     sessionCount 
-  } = useTimer(); // Removed unused timeLeft and isRunning
+  } = useTimer();
 
   const phases = [
     { name: 'Focus', value: 'focus' },
@@ -21,12 +21,16 @@ const Timer = ({ showSettings }) => {
 
   return (
     <div className="timer-container" style={{ backgroundColor: themes[theme].background }}>
-      <button className="settings-button" onClick={showSettings}>
+      <button 
+        className="settings-button" 
+        onClick={showSettings}
+        aria-label="Settings"
+      >
         <FiSettings size={24} />
       </button>
 
       <div className="session-counter" style={{ color: themes[theme].text }}>
-        Sessions Completed: {sessionCount}
+        Sessions: {sessionCount}
       </div>
 
       <div className="phase-switcher">
@@ -47,11 +51,10 @@ const Timer = ({ showSettings }) => {
       </div>
 
       <h1 className="app-title" style={{ color: themes[theme].text }}>
-        ❤️ Carolina Timer ❤️
+  ❤️ Carolina Timer ❤️
       </h1>
 
       <ProgressCircle />
-
       <Controls />
     </div>
   );

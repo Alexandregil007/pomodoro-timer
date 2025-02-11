@@ -62,7 +62,7 @@ const ProgressCircle = () => {
           cx="150"
           cy="150"
           r={radius}
-          stroke={themes[theme][phase === 'longBreak' ? 'pause' : phase]}
+          stroke={themes[theme][phase === 'longBreak' ? 'pause' : phase === 'break' ? 'pause' : phase]}
           strokeWidth="10"
           fill="transparent"
           strokeDasharray={`${circumference}`}
