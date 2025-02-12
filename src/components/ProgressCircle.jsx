@@ -3,8 +3,8 @@ import { useTimer } from '../contexts/TimerContext';
 import styled from 'styled-components';
 
 const Circle = styled.svg`
-  width: 100%;
-  height: 100%;
+  width: 300px;
+  height: 300px;
   transform: rotate(90deg);
   margin: 0 auto;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
@@ -19,10 +19,6 @@ const TimeDisplay = styled.div`
   font-weight: bold;
   font-family: 'Courier New', monospace;
   color: ${({ theme }) => theme.text};
-
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-  }
 `;
 
 const PhaseIndicator = styled.div`
@@ -35,10 +31,6 @@ const PhaseIndicator = styled.div`
   letter-spacing: 2px;
   color: ${({ $phase, theme }) => 
     $phase === 'focus' ? theme.focus : theme.pause};
-
-  @media (max-width: 768px) {
-    font-size: 1rem;
-  }
 `;
 
 const ProgressCircle = () => {
@@ -56,7 +48,7 @@ const ProgressCircle = () => {
   };
 
   return (
-    <div className="progress-container">
+    <div className="progress-container" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Circle>
         <circle
           cx="150"
