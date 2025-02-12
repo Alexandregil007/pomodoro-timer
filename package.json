@@ -2,7 +2,6 @@
   "name": "pomodoro-timer",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
     "canvas-confetti": "^1.9.3",
