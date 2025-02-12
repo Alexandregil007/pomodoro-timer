@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 
+export const config = {
+    runtime: 'edge',
+  };
+
 export function middleware(req) {
   const authHeader = req.headers.get('authorization');
-  const validAuth = 'Basic ' + Buffer.from('cobra:honesta').toString('base64');
+  const validAuth = 'Basic ' + new TextEncoder().encode('cobra:honesta').toString('base64');
 
   if (!authHeader || authHeader !== validAuth) {
     return new Response('Unauthorized', {
