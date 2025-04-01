@@ -13,12 +13,10 @@ const Settings = ({ onClose }) => {
     setVolume,
     vibrationEnabled,
     setVibrationEnabled,
-    durations,
     infiniteLoop,
     setInfiniteLoop,
     autoSkip,
     setAutoSkip,
-    repetitions,
     useDefaultValues,
     setUseDefaultValues,
     userDurations,
@@ -29,10 +27,10 @@ const Settings = ({ onClose }) => {
     setThemeSong,
     loopSongs,
     setLoopSongs
-  } = useTimer(); // Removed unused setRepetitions
+  } = useTimer();
 
-  const [localDurations, setLocalDurations] = useState({ ...durations });
-  const [localRepetitions, setLocalRepetitions] = useState(repetitions);
+  const [localDurations, setLocalDurations] = useState({ ...userDurations });
+  const [localRepetitions, setLocalRepetitions] = useState(userRepetitions);
   const [localInfiniteLoop, setLocalInfiniteLoop] = useState(infiniteLoop);
   const [localAutoSkip, setLocalAutoSkip] = useState(autoSkip);
   const [localSoundsEnabled, setLocalSoundsEnabled] = useState(soundsEnabled);
@@ -41,19 +39,29 @@ const Settings = ({ onClose }) => {
   const [localThemeSong, setLocalThemeSong] = useState(themeSong);
   const [cycleError, setCycleError] = useState('');
 
+  // Handle default values toggle
+  const handleDefaultToggle = (e) => {
+    const isDefault = e.target.checked;
+    setLocalUseDefaultValues(isDefault);
+
+    if (!isDefault) {
+      // Immediately save when disabling defaults
+      setUseDefaultValues(false);
+      setUserDurations(localDurations);
+      setUserRepetitions(localRepetitions);
+    }
+  };
+
+  // Sync local state with context
   useEffect(() => {
-    if (localUseDefaultValues) {
-      setLocalDurations({
-        focus: 25,
-        break: 5,
-        longBreak: 15
-      });
+    if (useDefaultValues) {
+      setLocalDurations({ focus: 25, break: 5, longBreak: 15 });
       setLocalRepetitions(4);
     } else {
       setLocalDurations(userDurations);
       setLocalRepetitions(userRepetitions);
     }
-  }, [localUseDefaultValues, userDurations, userRepetitions]); // Added missing dependencies
+  }, [useDefaultValues, userDurations, userRepetitions]);
 
   const handleRepetitionsChange = (value) => {
     if (value < 2) {
@@ -71,11 +79,9 @@ const Settings = ({ onClose }) => {
       return;
     }
 
-    if (!localUseDefaultValues) {
-      setUserDurations(localDurations);
-      setUserRepetitions(localRepetitions);
-    }
-
+    // Save all settings
+    setUserDurations(localDurations);
+    setUserRepetitions(localRepetitions);
     setInfiniteLoop(localInfiniteLoop);
     setAutoSkip(localAutoSkip);
     setSoundsEnabled(localSoundsEnabled);
@@ -250,7 +256,7 @@ const Settings = ({ onClose }) => {
               <input
                 type="checkbox"
                 checked={localUseDefaultValues}
-                onChange={(e) => setLocalUseDefaultValues(e.target.checked)}
+                onChange={handleDefaultToggle}
                 className="hidden-checkbox"
               />
               <span 
@@ -261,16 +267,14 @@ const Settings = ({ onClose }) => {
             </label>
           </div>
           
-          {localUseDefaultValues && (
+          {localUseDefaultValues ? (
             <div className="default-values-info">
               <p>Focus: 25 minutes</p>
               <p>Break: 5 minutes</p>
               <p>Long Break: 15 minutes</p>
               <p>Long Break Cycle: 4 sessions</p>
             </div>
-          )}
-          
-          {!localUseDefaultValues && (
+          ) : (
             <div className="horizontal-durations">
               <div className="duration-row">
                 <div className="duration-item">
@@ -278,9 +282,9 @@ const Settings = ({ onClose }) => {
                   <input
                     type="number"
                     value={localDurations.focus}
-                    onChange={(e) => setLocalDurations(prev => ({ 
-                      ...prev, 
-                      focus: Number(e.target.value) 
+                    onChange={(e) => setLocalDurations(prev => ({
+                      ...prev,
+                      focus: Number(e.target.value)
                     }))}
                     min="1"
                   />
@@ -290,9 +294,9 @@ const Settings = ({ onClose }) => {
                   <input
                     type="number"
                     value={localDurations.break}
-                    onChange={(e) => setLocalDurations(prev => ({ 
-                      ...prev, 
-                      break: Number(e.target.value) 
+                    onChange={(e) => setLocalDurations(prev => ({
+                      ...prev,
+                      break: Number(e.target.value)
                     }))}
                     min="1"
                   />
@@ -302,9 +306,9 @@ const Settings = ({ onClose }) => {
                   <input
                     type="number"
                     value={localDurations.longBreak}
-                    onChange={(e) => setLocalDurations(prev => ({ 
-                      ...prev, 
-                      longBreak: Number(e.target.value) 
+                    onChange={(e) => setLocalDurations(prev => ({
+                      ...prev,
+                      longBreak: Number(e.target.value)
                     }))}
                     min="1"
                   />
