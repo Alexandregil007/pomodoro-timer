@@ -10,7 +10,7 @@ const Timer = ({ showSettings }) => {
     themes, 
     phase, 
     switchPhase, 
-    sessionCount 
+    sessionCount
   } = useTimer();
 
   const phases = [
@@ -51,7 +51,7 @@ const Timer = ({ showSettings }) => {
       </div>
 
       <h1 className="app-title" style={{ color: themes[theme].text }}>
-  ❤️ Carolina Timer ❤️
+        ❤️ Carolina Timer ❤️
       </h1>
 
       <ProgressCircle />

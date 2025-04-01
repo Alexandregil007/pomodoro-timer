@@ -358,3 +358,65 @@ canvas.confetti-canvas {
   height: 100%;
   z-index: 9999;
 }
+
+.theme-song-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.theme-song-controls select {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  border: 2px solid;
+  background-color: inherit;
+  color: inherit;
+  accent-color: var(--theme-button);
+  width: 100%;
+  max-width: 220px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-song-controls select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.3);
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.volume-control input[type="range"] {
+  width: 120px;
+  margin: 0;
+  height: 6px;
+}
+
+/* New Styles for Loop Feature */
+.music-selector-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.loop-button.active {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.timer-container {
+  position: relative;
+  transition: all 0.3s ease;
+}

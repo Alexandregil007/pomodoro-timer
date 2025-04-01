@@ -14,20 +14,22 @@ const Settings = ({ onClose }) => {
     vibrationEnabled,
     setVibrationEnabled,
     durations,
-    setDurations,
     infiniteLoop,
     setInfiniteLoop,
     autoSkip,
     setAutoSkip,
     repetitions,
-    setRepetitions,
     useDefaultValues,
     setUseDefaultValues,
     userDurations,
     setUserDurations,
     userRepetitions,
-    setUserRepetitions
-  } = useTimer();
+    setUserRepetitions,
+    themeSong,
+    setThemeSong,
+    loopSongs,
+    setLoopSongs
+  } = useTimer(); // Removed unused setRepetitions
 
   const [localDurations, setLocalDurations] = useState({ ...durations });
   const [localRepetitions, setLocalRepetitions] = useState(repetitions);
@@ -36,7 +38,22 @@ const Settings = ({ onClose }) => {
   const [localSoundsEnabled, setLocalSoundsEnabled] = useState(soundsEnabled);
   const [localVibrationEnabled, setLocalVibrationEnabled] = useState(vibrationEnabled);
   const [localUseDefaultValues, setLocalUseDefaultValues] = useState(useDefaultValues);
+  const [localThemeSong, setLocalThemeSong] = useState(themeSong);
   const [cycleError, setCycleError] = useState('');
+
+  useEffect(() => {
+    if (localUseDefaultValues) {
+      setLocalDurations({
+        focus: 25,
+        break: 5,
+        longBreak: 15
+      });
+      setLocalRepetitions(4);
+    } else {
+      setLocalDurations(userDurations);
+      setLocalRepetitions(userRepetitions);
+    }
+  }, [localUseDefaultValues, userDurations, userRepetitions]); // Added missing dependencies
 
   const handleRepetitionsChange = (value) => {
     if (value < 2) {
@@ -54,14 +71,9 @@ const Settings = ({ onClose }) => {
       return;
     }
 
-    if (localUseDefaultValues) {
-      setDurations({ focus: 25, break: 5, longBreak: 15 });
-      setRepetitions(4);
-    } else {
+    if (!localUseDefaultValues) {
       setUserDurations(localDurations);
       setUserRepetitions(localRepetitions);
-      setDurations(localDurations);
-      setRepetitions(localRepetitions);
     }
 
     setInfiniteLoop(localInfiniteLoop);
@@ -72,13 +84,6 @@ const Settings = ({ onClose }) => {
 
     onClose();
   };
-
-  useEffect(() => {
-    if (!localUseDefaultValues) {
-      setLocalDurations(userDurations);
-      setLocalRepetitions(userRepetitions);
-    }
-  }, [localUseDefaultValues, userDurations, userRepetitions]);
 
   return (
     <div className="settings-overlay">
@@ -148,21 +153,78 @@ const Settings = ({ onClose }) => {
             </label>
             
             {localSoundsEnabled && (
-              <div className="volume-control">
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  value={volume}
-                  onChange={(e) => setVolume(parseFloat(e.target.value))}
-                  style={{ 
-                    accentColor: themes[theme].button,
-                    width: '120px'
-                  }}
-                />
-                <span>{Math.round(volume * 100)}%</span>
-              </div>
+              <>
+                <div className="volume-control">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.1"
+                    value={volume}
+                    onChange={(e) => setVolume(parseFloat(e.target.value))}
+                    style={{ 
+                      accentColor: themes[theme].button,
+                      width: '120px'
+                    }}
+                  />
+                  <span>{Math.round(volume * 100)}%</span>
+                </div>
+
+                <div className="theme-song-controls">
+                  <label>Background Music:</label>
+                  <div className="music-selector-wrapper">
+                    <select
+                      value={localThemeSong || ''}
+                      onChange={(e) => {
+                        setLocalThemeSong(e.target.value);
+                        setThemeSong(e.target.value);
+                        setLoopSongs(false);
+                      }}
+                      disabled={loopSongs}
+                      style={{
+                        backgroundColor: themes[theme].background,
+                        color: themes[theme].text,
+                        border: `1px solid ${themes[theme].button}`,
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        width: '100%',
+                        maxWidth: '200px',
+                        fontSize: '0.9rem',
+                        cursor: loopSongs ? 'not-allowed' : 'pointer',
+                        opacity: loopSongs ? 0.7 : 1
+                      }}
+                    >
+                      <option value="">No Music</option>
+                      <option value="song1.mp3">Song 1</option>
+                      <option value="song2.mp3">Song 2</option>
+                      <option value="song3.mp3">Song 3</option>
+                      <option value="song4.mp3">Sky Full of Stars</option>
+                      <option value="song5.mp3">Love Yourself</option>
+                      <option value="song6.mp3">Glimpse of Us</option>
+                    </select>
+                    <button
+                      className={`loop-button ${loopSongs ? 'active' : ''}`}
+                      onClick={() => {
+                        if (localThemeSong && localThemeSong !== "") {
+                          setLoopSongs(!loopSongs);
+                        }
+                      }}
+                      disabled={!localThemeSong || localThemeSong === ""}
+                      style={{
+                        marginLeft: '10px',
+                        padding: '6px 12px',
+                        borderRadius: '8px',
+                        border: `1px solid ${themes[theme].button}`,
+                        backgroundColor: loopSongs ? themes[theme].button : 'transparent',
+                        color: loopSongs ? '#fff' : themes[theme].text,
+                        cursor: (!localThemeSong || localThemeSong === "") ? 'not-allowed' : 'pointer'
+                      }}
+                    >
+                      🔄
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
             
             <label className="switch">
@@ -216,7 +278,10 @@ const Settings = ({ onClose }) => {
                   <input
                     type="number"
                     value={localDurations.focus}
-                    onChange={(e) => setLocalDurations(prev => ({ ...prev, focus: Number(e.target.value) }))}
+                    onChange={(e) => setLocalDurations(prev => ({ 
+                      ...prev, 
+                      focus: Number(e.target.value) 
+                    }))}
                     min="1"
                   />
                 </div>
@@ -225,7 +290,10 @@ const Settings = ({ onClose }) => {
                   <input
                     type="number"
                     value={localDurations.break}
-                    onChange={(e) => setLocalDurations(prev => ({ ...prev, break: Number(e.target.value) }))}
+                    onChange={(e) => setLocalDurations(prev => ({ 
+                      ...prev, 
+                      break: Number(e.target.value) 
+                    }))}
                     min="1"
                   />
                 </div>
@@ -234,7 +302,10 @@ const Settings = ({ onClose }) => {
                   <input
                     type="number"
                     value={localDurations.longBreak}
-                    onChange={(e) => setLocalDurations(prev => ({ ...prev, longBreak: Number(e.target.value) }))}
+                    onChange={(e) => setLocalDurations(prev => ({ 
+                      ...prev, 
+                      longBreak: Number(e.target.value) 
+                    }))}
                     min="1"
                   />
                 </div>
