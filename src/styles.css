@@ -420,3 +420,42 @@ canvas.confetti-canvas {
   position: relative;
   transition: all 0.3s ease;
 }
+
+/* Love message animation */
+.love-message {
+  position: relative;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  animation: float 3s ease-in-out infinite;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.alexandre-name {
+  color: #ff4444;
+  font-weight: bold;
+  margin: 0 0.3rem;
+  text-shadow: 0 2px 4px rgba(255, 68, 68, 0.3);
+}
+
+.heart-pulse {
+  display: inline-block;
+  animation: pulse 1.2s infinite;
+  margin: 0 0.3rem;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Ensure timer container has enough space */
+.timer-container {
+  padding-bottom: 2rem !important;
+}

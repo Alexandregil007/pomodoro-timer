@@ -56,6 +56,14 @@ const Timer = ({ showSettings }) => {
 
       <ProgressCircle />
       <Controls />
+      
+      {/* New animated message */}
+      <div className="love-message">
+        <span className="heart-pulse">❤️</span> 
+        Feito com amor do teu 
+        <span className="alexandre-name">Alexandre</span>
+        <span className="heart-pulse">❤️</span>
+      </div>
     </div>
   );
 };
