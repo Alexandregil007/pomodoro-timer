@@ -1,6 +1,7 @@
 // src/App.js
 import React, { useState } from 'react';
 import { TimerProvider } from './contexts/TimerContext';
+import { Analytics } from '@vercel/analytics/react';
 import Timer from './components/Timer';
 import Settings from './components/Settings';
 import ErrorBoundary from './ErrorBoundary';
@@ -15,6 +16,7 @@ export default function App() {
         <div className="app-container">
           <Timer showSettings={() => setShowSettings(true)} />
           {showSettings && <Settings onClose={() => setShowSettings(false)} />}
+          <Analytics />
         </div>
       </TimerProvider>
     </ErrorBoundary>
